@@ -269,12 +269,24 @@ function getHeaders(apiKey) {
     return { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' };
 }
 
+function parseCSVLine(line) {
+    const vals = [];
+    let current = '', inQuotes = false;
+    for (const ch of line) {
+        if (ch === '"') inQuotes = !inQuotes;
+        else if (ch === ',' && !inQuotes) { vals.push(current); current = ''; }
+        else current += ch;
+    }
+    vals.push(current);
+    return vals;
+}
+
 function parseCSV(text) {
     const lines = text.trim().split('\n');
     if (lines.length < 2) return [];
-    const headers = lines[0].split(',');
+    const headers = parseCSVLine(lines[0]);
     return lines.slice(1).map(line => {
-        const vals = line.split(',');
+        const vals = parseCSVLine(line);
         const obj = {};
         headers.forEach((h, i) => obj[h.trim()] = (vals[i] || '').trim());
         return obj;
