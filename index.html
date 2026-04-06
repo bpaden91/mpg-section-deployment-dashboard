@@ -438,10 +438,8 @@ function showDashboard() {
     document.getElementById('setupScreen').classList.add('hidden');
     document.getElementById('dashboardView').classList.remove('hidden');
 
-    // Set title based on detected orgs
-    const orgs = [...new Set(DATA.users.map(u => u.brand))].sort();
-    document.getElementById('dashTitle').textContent = orgs.length === 1
-        ? `${orgs[0]} — Section Deployment` : 'Section Deployment Dashboard';
+    // Keep a static dashboard title now that branding is shown in the header logo
+    document.getElementById('dashTitle').textContent = 'Section Deployment Dashboard';
     document.title = document.getElementById('dashTitle').textContent;
 
     initDashboard();
